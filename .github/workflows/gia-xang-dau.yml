@@ -1,0 +1,72 @@
+# .github/workflows/gia-xang-dau.yml
+# Lấy bảng giá xăng dầu chính thống Petrolimex, ghi data/gia-xang-dau.json
+#
+# VÌ SAO Ở ĐÂY MÀ KHÔNG PHẢI APPS SCRIPT:
+#   Petrolimex chặn dải IP Google — Apps Script trả "Address unavailable" và
+#   treo ~256 giây. Máy chủ GitHub ở Mỹ thì vào bình thường.
+#
+# Kỳ điều hành có hiệu lực 15:00 giờ VN = 08:00 UTC. Chạy 3 lần cho chắc.
+
+name: Giá xăng dầu
+
+on:
+  schedule:
+    - cron: "20 8 * * *"    # 15:20 VN — ngay sau giờ điều chỉnh
+    - cron: "0 10 * * *"    # 17:00 VN — chạy lại phòng khi đăng muộn
+    - cron: "0 1 * * *"     # 08:00 VN — chốt lại đầu ngày
+  workflow_dispatch:         # cho phép bấm chạy tay
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gia-xang-dau
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cài tesseract (có gói tiếng Việt)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-vie
+          tesseract --version | head -1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Crawl và đối chiếu
+        id: crawl
+        continue-on-error: true      # LECH/THIEU vẫn phải commit để giữ log
+        run: python scripts/crawl_gia.py
+
+      - name: Commit nếu có thay đổi
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/gia-xang-dau.json
+          if git diff --staged --quiet; then
+            echo "Không có thay đổi."
+          else
+            TT=$(python -c "import json;print(json.load(open('data/gia-xang-dau.json'))['trang_thai'])")
+            KY=$(python -c "import json;print(json.load(open('data/gia-xang-dau.json'))['ky'])")
+            git commit -m "Giá xăng dầu kỳ ${KY} — ${TT}"
+            git push
+          fi
+
+      - name: Báo lỗi nếu đối chiếu lệch
+        if: steps.crawl.outcome == 'failure'
+        run: |
+          echo "::warning::Crawl không đạt. Xem trang_thai và loi trong data/gia-xang-dau.json"
+          python - <<'EOF'
+          import json
+          d = json.load(open("data/gia-xang-dau.json"))
+          print("Trạng thái:", d["trang_thai"])
+          for e in d.get("loi", []):
+              print(" -", e)
+          EOF
+          exit 1
