@@ -39,6 +39,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Cài Pillow
+        run: pip install --quiet Pillow
+
       - name: Crawl và đối chiếu
         id: crawl
         continue-on-error: true      # LECH/THIEU vẫn phải commit để giữ log

@@ -23,7 +23,7 @@ VÌ SAO CHẠY Ở GITHUB ACTIONS CHỨ KHÔNG PHẢI APPS SCRIPT:
   Nguyên tắc: thà số cũ còn hơn số sai.
 """
 
-import json, os, re, subprocess, sys, tempfile, datetime, urllib.request
+import io, json, os, re, subprocess, sys, tempfile, datetime, urllib.request
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0"
 TCBC = "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi.html"
@@ -86,16 +86,53 @@ def anh_bang_gia(url):
 
 
 def ocr(img_bytes):
-    """tesseract, cài sẵn trong workflow. --psm 6 = coi ảnh là một khối văn bản."""
+    """Tiền xử lý rồi OCR.
+
+    Ảnh gốc chỉ 966x554 — quá nhỏ, tesseract đọc sai tên mặt hàng (95-V thành
+    98V), mất dấu chấm nghìn, và BỎ HẲN hai dòng Điêzen. Phóng to 3 lần + xám +
+    tăng tương phản khắc phục phần lớn.
+    """
+    from PIL import Image, ImageOps
     with tempfile.TemporaryDirectory() as td:
-        p = os.path.join(td, "g.jpg")
-        open(p, "wb").write(img_bytes)
+        src = os.path.join(td, "g.png")
+        im = Image.open(io.BytesIO(img_bytes)).convert("L")
+        im = im.resize((im.width * 3, im.height * 3), Image.LANCZOS)
+        im = ImageOps.autocontrast(im)
+        im.save(src)
         r = subprocess.run(
-            ["tesseract", p, "stdout", "-l", "vie+eng", "--psm", "6"],
-            capture_output=True, text=True, timeout=180)
+            ["tesseract", src, "stdout", "-l", "vie+eng", "--psm", "6"],
+            capture_output=True, text=True, timeout=300)
         if r.returncode != 0:
             raise RuntimeError("tesseract lỗi: " + r.stderr[:300])
         return r.stdout
+
+
+def so_trong_dong(line):
+    """Các số tiền trong một dòng. Chấp nhận cả 22.830 lẫn 22830 vì OCR hay
+    nuốt mất dấu chấm nghìn."""
+    out = []
+    for m in re.finditer(r"\b\d{2}\s*[.,]?\s*\d{3}\b", line):
+        v = int(re.sub(r"[^\d]", "", m.group(0)))
+        if 9000 < v < 90000:
+            out.append(v)
+    return out
+
+
+def doc_bang(txt):
+    """Lấy 8 dòng giá THEO THỨ TỰ, không dựa vào tên mặt hàng.
+
+    OCR đọc sai tên (95-V -> 98V, 95-III -> 96-II) nên khớp theo tên là không
+    đáng tin. Nhưng thứ tự 8 mặt hàng trong bảng Petrolimex cố định nhiều năm,
+    và mỗi dòng giá có đúng 2 số tiền. Nên: lọc các dòng có >= 2 số tiền, rồi
+    gán theo thứ tự. Nếu không ra đúng 8 dòng thì coi như thất bại — đối chiếu
+    webgia phía sau sẽ bắt được mọi trường hợp lệch hàng.
+    """
+    rows = []
+    for line in txt.splitlines():
+        so = so_trong_dong(line)
+        if len(so) >= 2:
+            rows.append(so[:2])
+    return rows
 
 
 def hai_so(txt, pattern):
@@ -152,13 +189,15 @@ def main():
         print(txt[:2000])
         print("=" * 58)
 
+        rows = doc_bang(raw)
+        kq["so_dong_ocr"] = len(rows)
         gia = {}
-        for k, ten, re_ocr, _ in SP:
-            r = hai_so(txt, re_ocr)
-            if r:
-                gia[k] = {"ten": ten, "v1": r["v1"], "v2": r["v2"]}
-            else:
-                kq["loi"].append(f"OCR không đọc được {ten}")
+        if len(rows) == len(SP):
+            for i, (k, ten, _, _) in enumerate(SP):
+                gia[k] = {"ten": ten, "v1": rows[i][0], "v2": rows[i][1]}
+        else:
+            kq["loi"].append(
+                f"OCR ra {len(rows)} dòng giá, cần đúng {len(SP)} — không gán được theo thứ tự")
 
         # --- đối chiếu webgia: đây là cách tự kiểm OCR ---
         wg = {}
