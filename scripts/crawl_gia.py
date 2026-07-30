@@ -167,10 +167,27 @@ def doc_webgia():
 
 
 def main():
+    """Chiến lược sau 3 vòng thử OCR trên ảnh thật:
+
+    tesseract KHÔNG đọc nổi ảnh này một cách trọn vẹn — hai dòng Điêzen biến
+    mất qua mọi cấu hình đã thử, và mazút bị đọc sai chữ số (20.360 -> 204360,
+    15.870 -> 18.870). Nhưng hai dòng RON 95 thì đọc ĐÚNG ở cả hai lần chạy.
+
+    Nên chia việc theo đúng chỗ mạnh của từng nguồn:
+      · 4 mặt hàng webgia có (E5, Điêzen 0,001S, Điêzen 0,05S, dầu hỏa)
+        -> lấy THẲNG từ webgia, đã xác minh khớp bảng chính thống
+      · 2 dòng RON 95 (webgia bỏ trống vì đổi tên sang E10)
+        -> lấy từ OCR, dùng dòng E5 làm MỎ NEO để chứng minh không lệch hàng
+      · mazút -> bỏ, không ai dùng và OCR không đáng tin ở đó
+
+    Mỏ neo: tìm dòng OCR có cặp số trùng KHỚP TUYỆT ĐỐI với E5 của webgia.
+    Trong bảng Petrolimex, ngay phía trên E5 luôn là RON 95-III rồi RON 95-V.
+    Neo khớp nghĩa là OCR đọc đúng ảnh đó và hàng không xê dịch.
+    """
     kq = {
         "cap_nhat": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "trang_thai": "FAIL", "ky": None, "gio_hieu_luc": None,
-        "nguon": "petrolimex-tcbc-ocr", "gia": {}, "loi": [], "doi_chieu": {},
+        "nguon": "webgia + OCR Petrolimex (neo E5)", "gia": {}, "loi": [], "doi_chieu": {},
     }
     try:
         d, url, gio = ky_moi_nhat()
@@ -178,63 +195,61 @@ def main():
         kq["gio_hieu_luc"] = gio
         kq["bai"] = url
 
+        wg = doc_webgia()
+        if not wg.get("E5_R92"):
+            raise RuntimeError("webgia không có E5 — không có mỏ neo để kiểm OCR")
+
+        gia = {}
+        for k, ten, _, re_wg in SP:
+            if re_wg and k in wg:
+                gia[k] = {"ten": ten, "v1": wg[k]["v1"], "v2": wg[k]["v2"], "nguon": "webgia"}
+
+        # --- OCR chỉ để lấy 2 dòng RON 95 ---
         img_url = anh_bang_gia(url)
         kq["anh"] = img_url
         raw = ocr(get(img_url, binary=True))
-        txt = soc(raw)
-        kq["ocr_raw"] = raw[:3000]
-        print("=" * 20, "VĂN BẢN OCR THÔ", "=" * 20)
-        print(raw[:3000])
-        print("=" * 20, "SAU KHI CHUẨN HOÁ", "=" * 20)
-        print(txt[:2000])
-        print("=" * 58)
-
         rows = doc_bang(raw)
         kq["so_dong_ocr"] = len(rows)
-        gia = {}
-        if len(rows) == len(SP):
-            for i, (k, ten, _, _) in enumerate(SP):
-                gia[k] = {"ten": ten, "v1": rows[i][0], "v2": rows[i][1]}
-        else:
+
+        e5 = wg["E5_R92"]
+        neo = -1
+        for idx, r in enumerate(rows):
+            if r[0] == e5["v1"] and (not e5["v2"] or r[1] == e5["v2"]):
+                neo = idx
+                break
+
+        if neo < 2:
             kq["loi"].append(
-                f"OCR ra {len(rows)} dòng giá, cần đúng {len(SP)} — không gán được theo thứ tự")
-
-        # --- đối chiếu webgia: đây là cách tự kiểm OCR ---
-        wg = {}
-        try:
-            wg = doc_webgia()
-        except Exception as e:
-            kq["loi"].append(f"webgia lỗi (không chặn): {e}")
-
-        khop = lech = 0
-        for k, ten, _, re_wg in SP:
-            if not re_wg or k not in gia or k not in wg:
-                continue
-            a, b = gia[k], wg[k]
-            ok = a["v1"] == b["v1"] and (not a["v2"] or not b["v2"] or a["v2"] == b["v2"])
-            kq["doi_chieu"][k] = {"ocr": [a["v1"], a["v2"]],
-                                  "webgia": [b["v1"], b["v2"]], "khop": ok}
-            khop += ok
-            lech += (not ok)
-            if not ok:
+                f"Không neo được dòng E5 trong OCR (neo={neo}, {len(rows)} dòng) "
+                f"— bỏ qua RON 95 kỳ này")
+        else:
+            r3, r5 = rows[neo - 1], rows[neo - 2]
+            # Thứ bậc giá bắt buộc: RON95-V > RON95-III > E5
+            if not (r5[0] > r3[0] > e5["v1"]):
                 kq["loi"].append(
-                    f"{ten}: OCR {a['v1']}/{a['v2']} khác webgia {b['v1']}/{b['v2']}")
+                    f"RON95 sai thứ bậc giá (V={r5[0]}, III={r3[0]}, E5={e5['v1']}) — bỏ qua")
+            else:
+                gia["E10_R95_III"] = {"ten": "Xăng E10 RON 95-III", "v1": r3[0], "v2": r3[1],
+                                      "nguon": "OCR Petrolimex (neo E5)"}
+                gia["E10_R95_V"] = {"ten": "Xăng E10 RON 95-V", "v1": r5[0], "v2": r5[1],
+                                    "nguon": "OCR Petrolimex (neo E5)"}
+                kq["doi_chieu"]["neo_E5"] = {"dong_ocr": neo, "ocr": rows[neo],
+                                             "webgia": [e5["v1"], e5["v2"]], "khop": True}
 
-        if lech:
-            # OCR sai ở dòng kiểm được -> không tin cả bảng. Giữ file cũ.
-            kq["trang_thai"] = "LECH"
-        elif khop >= 2 and len(gia) >= 6:
+        co_r95 = "E10_R95_III" in gia
+        if len(gia) >= 4 and co_r95:
             kq["trang_thai"] = "OK"
-            kq["gia"] = gia
+        elif len(gia) >= 4:
+            kq["trang_thai"] = "THIEU_R95"      # vẫn dùng được: đủ xăng E5 + 2 loại điêzen
         else:
             kq["trang_thai"] = "THIEU"
-            kq["loi"].append(f"chỉ đối chiếu được {khop} dòng, OCR ra {len(gia)}/8 mặt hàng")
+        kq["gia"] = gia
 
     except Exception as e:
         kq["loi"].append(str(e))
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    if kq["trang_thai"] != "OK" and os.path.exists(OUT):
+    if not kq["gia"] and os.path.exists(OUT):
         try:
             cu = json.load(open(OUT, encoding="utf-8"))
             kq["gia"] = cu.get("gia", {})
@@ -246,9 +261,10 @@ def main():
         json.dump(kq, f, ensure_ascii=False, indent=1)
 
     print(json.dumps({"trang_thai": kq["trang_thai"], "ky": kq["ky"],
-                      "so_mat_hang": len(kq["gia"]), "loi": kq["loi"]},
+                      "so_mat_hang": len(kq["gia"]),
+                      "mat_hang": sorted(kq["gia"].keys()), "loi": kq["loi"]},
                      ensure_ascii=False, indent=1))
-    return 0 if kq["trang_thai"] == "OK" else 1
+    return 0 if kq["trang_thai"] in ("OK", "THIEU_R95") else 1
 
 
 if __name__ == "__main__":
