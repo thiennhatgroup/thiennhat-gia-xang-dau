@@ -1,24 +1,18 @@
 {
- "cap_nhat": "2026-07-30T07:16:48.151570+00:00",
+ "cap_nhat": "2026-07-30T07:20:11.672348+00:00",
  "trang_thai": "THIEU",
  "ky": "23/07/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "petrolimex-tcbc-ocr",
  "gia": {},
  "loi": [
-  "OCR không đọc được Xăng E10 RON 95-V",
-  "OCR không đọc được Xăng E10 RON 95-III",
-  "OCR không đọc được Xăng E5 RON 92-II",
-  "OCR không đọc được Điêzen 0,001S-V",
-  "OCR không đọc được Điêzen 0,05S-II",
-  "OCR không đọc được Dầu hỏa 2-K",
-  "OCR không đọc được Mazút N2B 3,5S",
-  "OCR không đọc được Mazút 180cst 0,5S",
+  "OCR ra 5 dòng giá, cần đúng 8 — không gán được theo thứ tự",
   "chỉ đối chiếu được 0 dòng, OCR ra 0/8 mặt hàng"
  ],
  "doi_chieu": {},
  "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-23-7-2026.html",
  "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/d44648f550c94af6a7200ecb0738ffe4/gbl.jpg",
- "ocr_raw": "Đơn vị tính\n\n(Đã bao gồm\n\nthuế GTGT)\n|Xăng sinh học E10 RON 98V | Đồngt | 22830 | 23.280 |\n|Xăng sinh học E10 RON 96-II | Đồngit | 21430 | 21850 |\n|Xăng sinh học E5 RON 92-1 ¡ ĐồngHt | 20880 | 21290 |\n[Dauhda2-K ¡ Đồng | 26650 | 27180 |\n|MazútN°2B(35S | Đồngkg | 15860 | 18870 |\n|Mazút 180est-06S(RMG) | Đồngkg | 20360 | 20760 |\nphải kê khai, tính nộp thuế GTGT nhưng được kháu trừ thuế GTGT dau vào theo văn bản\nsố 1088/TTTN-XD ngày 15/4/2026 của Bộ Công Thương, mức giá của mặt hàng Mazut là\ngiá bán buôn\n",
+ "ocr_raw": "Đơn vị tính\n\nheron Vung 1 Vung 2\nXang sinh học E10 RON958V | Đồnglt | 22830 | 23.280\n'Xăng sinh học E10 RON 95-ll | Đồnglt | 21430 | 21850 |\nXăng sinh học E5 RON 92 Ð — | ĐồngHt | 20880 | 21290 -\nDauhda2-K | Đônglt | 26650 | 27180\nMazutN°2B (3,58) | Đồngkg | 15560 | 18.870 |\nMazut 180cst-0,5S(RMG)_ | Đồngkg | 204360 | 20.760 |\nphải kê khai, tính nộp thuế GTGT nhưng được khấu trừ thuế GTGT đâu vào theo văn bản\nsô 1088/TTTN-XD ngày 15/4/2026 của Bộ Công Thương, mức giá của mặt hàng Mazút là\ngiá bán buôn\n",
+ "so_dong_ocr": 5,
  "giu_so_cu_tu": "23/07/2026"
 }
