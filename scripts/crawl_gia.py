@@ -143,7 +143,14 @@ def main():
 
         img_url = anh_bang_gia(url)
         kq["anh"] = img_url
-        txt = soc(ocr(get(img_url, binary=True)))
+        raw = ocr(get(img_url, binary=True))
+        txt = soc(raw)
+        kq["ocr_raw"] = raw[:3000]
+        print("=" * 20, "VĂN BẢN OCR THÔ", "=" * 20)
+        print(raw[:3000])
+        print("=" * 20, "SAU KHI CHUẨN HOÁ", "=" * 20)
+        print(txt[:2000])
+        print("=" * 58)
 
         gia = {}
         for k, ten, re_ocr, _ in SP:
