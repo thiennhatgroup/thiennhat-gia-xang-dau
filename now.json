@@ -1,0 +1,63 @@
+{
+ "cap_nhat": "2026-07-30T07:23:13.569931+00:00",
+ "trang_thai": "OK",
+ "ky": "23/07/2026",
+ "gio_hieu_luc": "15:00",
+ "nguon": "webgia + OCR Petrolimex (neo E5)",
+ "gia": {
+  "E5_R92": {
+   "ten": "Xăng E5 RON 92-II",
+   "v1": 20880,
+   "v2": 21290,
+   "nguon": "webgia"
+  },
+  "DO_0001S": {
+   "ten": "Điêzen 0,001S-V",
+   "v1": 27860,
+   "v2": 28410,
+   "nguon": "webgia"
+  },
+  "DO_005S": {
+   "ten": "Điêzen 0,05S-II",
+   "v1": 25760,
+   "v2": 26270,
+   "nguon": "webgia"
+  },
+  "KERO": {
+   "ten": "Dầu hỏa 2-K",
+   "v1": 26650,
+   "v2": 27180,
+   "nguon": "webgia"
+  },
+  "E10_R95_III": {
+   "ten": "Xăng E10 RON 95-III",
+   "v1": 21430,
+   "v2": 21850,
+   "nguon": "OCR Petrolimex (neo E5)"
+  },
+  "E10_R95_V": {
+   "ten": "Xăng E10 RON 95-V",
+   "v1": 22830,
+   "v2": 23280,
+   "nguon": "OCR Petrolimex (neo E5)"
+  }
+ },
+ "loi": [],
+ "doi_chieu": {
+  "neo_E5": {
+   "dong_ocr": 2,
+   "ocr": [
+    20880,
+    21290
+   ],
+   "webgia": [
+    20880,
+    21290
+   ],
+   "khop": true
+  }
+ },
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-23-7-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/d44648f550c94af6a7200ecb0738ffe4/gbl.jpg",
+ "so_dong_ocr": 5
+}

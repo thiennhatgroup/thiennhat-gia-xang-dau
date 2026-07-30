@@ -218,13 +218,23 @@ def main():
                 neo = idx
                 break
 
-        if neo < 2:
+        # webgia có ĐỒNG BỘ với kỳ đang xét không?
+        # Ảnh Petrolimex là của kỳ MỚI. Nếu OCR đọc được các dòng giá mà KHÔNG
+        # dòng nào trùng E5 của webgia, thì webgia còn đang ở kỳ CŨ (nó cập nhật
+        # chậm hơn Petrolimex vài chục phút). Đăng giá cũ dưới nhãn kỳ mới là
+        # sai nghiêm trọng -> không đăng gì, giữ số cũ.
+        if rows and neo < 0:
+            kq["trang_thai"] = "LECH_NGUON"
             kq["loi"].append(
-                f"Không neo được dòng E5 trong OCR (neo={neo}, {len(rows)} dòng) "
-                f"— bỏ qua RON 95 kỳ này")
-        else:
+                f"OCR đọc được {len(rows)} dòng nhưng không dòng nào trùng E5 webgia "
+                f"({e5['v1']}/{e5['v2']}) — webgia có thể còn ở kỳ cũ. Không đăng.")
+            kq["gia"] = {}
+        elif not rows:
+            kq["loi"].append("OCR không đọc được dòng nào — 4 mặt hàng webgia "
+                             "chưa được đối chiếu với kỳ này")
+
+        if neo >= 2:
             r3, r5 = rows[neo - 1], rows[neo - 2]
-            # Thứ bậc giá bắt buộc: RON95-V > RON95-III > E5
             if not (r5[0] > r3[0] > e5["v1"]):
                 kq["loi"].append(
                     f"RON95 sai thứ bậc giá (V={r5[0]}, III={r3[0]}, E5={e5['v1']}) — bỏ qua")
@@ -235,9 +245,13 @@ def main():
                                     "nguon": "OCR Petrolimex (neo E5)"}
                 kq["doi_chieu"]["neo_E5"] = {"dong_ocr": neo, "ocr": rows[neo],
                                              "webgia": [e5["v1"], e5["v2"]], "khop": True}
+        elif rows:
+            kq["loi"].append(f"Neo E5 ở dòng {neo}, không đủ 2 dòng phía trên cho RON 95")
 
         co_r95 = "E10_R95_III" in gia
-        if len(gia) >= 4 and co_r95:
+        if kq["trang_thai"] == "LECH_NGUON":
+            pass
+        elif len(gia) >= 4 and co_r95:
             kq["trang_thai"] = "OK"
         elif len(gia) >= 4:
             kq["trang_thai"] = "THIEU_R95"      # vẫn dùng được: đủ xăng E5 + 2 loại điêzen
