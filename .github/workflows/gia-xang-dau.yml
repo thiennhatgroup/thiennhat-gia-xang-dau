@@ -55,9 +55,12 @@ jobs:
           if git diff --staged --quiet; then
             echo "Không có thay đổi."
           else
-            TT=$(python -c "import json;print(json.load(open('data/gia-xang-dau.json'))['trang_thai'])")
-            KY=$(python -c "import json;print(json.load(open('data/gia-xang-dau.json'))['ky'])")
-            git commit -m "Giá xăng dầu kỳ ${KY} — ${TT}"
+            # `ky` là kỳ của GIÁ trong file, không phải kỳ của bài mới nhất —
+            # khi giữ số cũ thì hai mốc này khác nhau, ghi cả hai cho khỏi nhầm.
+            read TT KY KB <<<"$(python -c "import json;d=json.load(open('data/gia-xang-dau.json'));print(d['trang_thai'],d.get('ky'),d.get('ky_bai_moi_nhat'))")"
+            MSG="Giá xăng dầu kỳ ${KY} — ${TT}"
+            [ "$KY" = "$KB" ] || MSG="${MSG} (bài mới nhất: kỳ ${KB})"
+            git commit -m "$MSG"
             git push
           fi
 

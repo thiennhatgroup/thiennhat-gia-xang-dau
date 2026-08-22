@@ -23,7 +23,8 @@ VÌ SAO CHẠY Ở GITHUB ACTIONS CHỨ KHÔNG PHẢI APPS SCRIPT:
   Nguyên tắc: thà số cũ còn hơn số sai.
 """
 
-import io, json, os, re, subprocess, sys, tempfile, datetime, urllib.request
+import io, json, os, re, subprocess, sys, tempfile, datetime
+import urllib.request, urllib.parse
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0"
 TCBC = "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi.html"
@@ -75,14 +76,43 @@ def ky_moi_nhat():
     return best
 
 
+# Ảnh trong bài nằm ở files.petrolimex.com.vn/jpgs/<hash>/<hash>/<tên>.jpg
+# Tên ảnh KHÔNG cố định: tới kỳ 23/07/2026 vẫn là gbl.jpg (bảng giá) và
+# trich.jpg (trích lập Quỹ BOG), từ kỳ 20/08/2026 đổi sang dấu thời gian
+# ("20-08-2026 14-40-51.jpg", trong HTML là %20). Ghim cứng gbl.jpg làm crawler
+# chết âm thầm suốt hai kỳ. Thứ tự thì không đổi: ảnh bảng giá LUÔN đứng trước.
+#
+# Quét theo giá trị thuộc tính có dấu nháy (src/href/srcset/data-src) chứ không
+# quét URL trần: tên ảnh có thể chứa dấu cách chưa mã hoá, mà dừng ở dấu nháy
+# thì vẫn lấy trọn. Neo cuối chuỗi bằng \Z để bỏ biến thể .jpg.webp mà
+# <source srcset> chèn ngay trước ảnh thật.
+RE_THUOC_TINH = re.compile(
+    r"""(?:src|srcset|href|data-src)\s*=\s*(?:"([^"]+)"|'([^']+)')""", re.I)
+RE_ANH_JPGS = re.compile(
+    r"""(?:https?:)?//files\.petrolimex\.com\.vn/jpgs/.+\.jpe?g\Z""", re.I)
+
+
 def anh_bang_gia(url):
+    """URL ảnh bảng giá trong bài.
+
+    Lấy ảnh /jpgs/ ĐẦU TIÊN theo thứ tự xuất hiện, ưu tiên gbl.jpg nếu bài cũ
+    còn dùng tên đó. Lấy nhầm ảnh Quỹ BOG cũng không đăng sai được: mỏ neo E5 ở
+    main() sẽ không khớp và cả kỳ bị từ chối.
+    """
     html = get(url)
-    m = re.search(r'src="((?:https?:)?//files\.petrolimex\.com\.vn/[^"]*gbl\.jpg)"',
-                  html, re.I)
-    if not m:
-        raise RuntimeError("Không thấy ảnh gbl.jpg trong bài")
-    u = m.group(1)
-    return u if u.startswith("http") else "https:" + u
+    thay = []
+    for m in RE_THUOC_TINH.finditer(html):
+        u = (m.group(1) or m.group(2)).strip()
+        if RE_ANH_JPGS.match(u) and u not in thay:
+            thay.append(u)
+    if not thay:
+        raise RuntimeError("Không thấy ảnh nào trong /jpgs/ của bài")
+    u = next((x for x in thay if x.lower().endswith("/gbl.jpg")), thay[0])
+    if not u.startswith("http"):
+        u = "https:" + u
+    # %20 đã có sẵn thì giữ nguyên (dấu % nằm trong safe), dấu cách thô thì mã
+    # hoá nốt — urllib.request không nuốt được dấu cách trần.
+    return urllib.parse.quote(u, safe=":/%?&=#")
 
 
 def ocr(img_bytes):
@@ -166,6 +196,19 @@ def doc_webgia():
     return out
 
 
+def ky_cua_gia(d):
+    """Kỳ mà phần `gia` của một file kết quả THẬT SỰ thuộc về.
+
+    File cũ có thể do bản trước bản vá này ghi ra, khi đó `ky` là kỳ của BÀI chứ
+    chưa chắc là kỳ của giá — nên phải suy ngược theo trạng thái.
+    """
+    if d.get("ky_cua_gia"):
+        return d["ky_cua_gia"]
+    if d.get("trang_thai") in ("OK", "THIEU_R95"):
+        return d.get("ky")
+    return d.get("giu_so_cu_tu") or d.get("ky")
+
+
 def main():
     """Chiến lược sau 3 vòng thử OCR trên ảnh thật:
 
@@ -186,12 +229,17 @@ def main():
     """
     kq = {
         "cap_nhat": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "trang_thai": "FAIL", "ky": None, "gio_hieu_luc": None,
+        # `ky` LUÔN là kỳ mà phần `gia` thuộc về — kể cả khi đang giữ số cũ.
+        # Kỳ của bài mới nhất nằm riêng ở `ky_bai_moi_nhat`. Gộp hai mốc này
+        # vào một trường là cách bản cũ dán nhãn kỳ 20/08 lên giá kỳ 23/07.
+        "trang_thai": "FAIL", "ky": None, "ky_cua_gia": None,
+        "ky_bai_moi_nhat": None, "gio_hieu_luc": None,
         "nguon": "webgia + OCR Petrolimex (neo E5)", "gia": {}, "loi": [], "doi_chieu": {},
     }
     try:
         d, url, gio = ky_moi_nhat()
-        kq["ky"] = d.strftime("%d/%m/%Y")
+        kq["ky_bai_moi_nhat"] = d.strftime("%d/%m/%Y")
+        kq["ky"] = kq["ky_bai_moi_nhat"]   # tạm; cuối hàm sẽ chốt lại theo `gia`
         kq["gio_hieu_luc"] = gio
         kq["bai"] = url
 
@@ -263,18 +311,36 @@ def main():
         kq["loi"].append(str(e))
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    if not kq["gia"] and os.path.exists(OUT):
+
+    # Giữ số cũ khi thất bại là đúng — "thà số cũ hơn số sai". Nhưng số cũ phải
+    # mang đúng NHÃN cũ. Bản trước ghi `ky` là kỳ của bài mới nhất trong khi
+    # `gia` vẫn là của kỳ trước đó, nên ai đọc JSON cũng hiểu nhầm giá cũ là
+    # giá kỳ mới. Ở đây `ky` luôn đi kèm `gia`.
+    if kq["gia"]:
+        kq["ky_cua_gia"] = kq["ky"]
+    elif os.path.exists(OUT):
         try:
             cu = json.load(open(OUT, encoding="utf-8"))
-            kq["gia"] = cu.get("gia", {})
-            kq["giu_so_cu_tu"] = cu.get("ky")
         except Exception:
-            pass
+            cu = {}
+        if cu.get("gia"):
+            ky_cu = ky_cua_gia(cu)
+            kq["gia"] = cu["gia"]
+            kq["ky"] = ky_cu
+            kq["ky_cua_gia"] = ky_cu
+            kq["gio_hieu_luc"] = cu.get("gio_hieu_luc")
+            kq["giu_so_cu_tu"] = ky_cu
+            if ky_cu != kq["ky_bai_moi_nhat"]:
+                kq["loi"].append(
+                    f"Giữ nguyên giá kỳ {ky_cu}; kỳ {kq['ky_bai_moi_nhat']} chưa lấy được.")
+            else:
+                kq["loi"].append(f"Giữ nguyên giá kỳ {ky_cu} của lần chạy trước.")
 
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(kq, f, ensure_ascii=False, indent=1)
 
-    print(json.dumps({"trang_thai": kq["trang_thai"], "ky": kq["ky"],
+    print(json.dumps({"trang_thai": kq["trang_thai"], "ky_cua_gia": kq["ky"],
+                      "ky_bai_moi_nhat": kq["ky_bai_moi_nhat"],
                       "so_mat_hang": len(kq["gia"]),
                       "mat_hang": sorted(kq["gia"].keys()), "loi": kq["loi"]},
                      ensure_ascii=False, indent=1))

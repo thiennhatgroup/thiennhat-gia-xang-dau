@@ -1,7 +1,7 @@
 {
  "cap_nhat": "2026-08-22T02:17:06.995735+00:00",
  "trang_thai": "FAIL",
- "ky": "20/08/2026",
+ "ky": "23/07/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
@@ -43,9 +43,12 @@
   }
  },
  "loi": [
-  "Không thấy ảnh gbl.jpg trong bài"
+  "Không thấy ảnh gbl.jpg trong bài",
+  "Giữ nguyên giá kỳ 23/07/2026; kỳ 20/08/2026 chưa lấy được."
  ],
  "doi_chieu": {},
  "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-20-8-2026.html",
- "giu_so_cu_tu": "20/08/2026"
+ "giu_so_cu_tu": "23/07/2026",
+ "ky_bai_moi_nhat": "20/08/2026",
+ "ky_cua_gia": "23/07/2026"
 }
