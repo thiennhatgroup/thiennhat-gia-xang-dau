@@ -115,18 +115,31 @@ def anh_bang_gia(url):
     return urllib.parse.quote(u, safe=":/%?&=#")
 
 
-def ocr(img_bytes):
+# Các mức phóng to thử lần lượt cho tới khi OCR ra kết quả sạch. Cùng một ảnh
+# nhưng mức phóng khác nhau thì tesseract dựng lại nét chữ khác nhau, nên một
+# chữ số đọc lệch ở mức này thường đọc đúng ở mức kia.
+#
+# Đo trên ảnh kỳ 20/08/2026 (961x553), 6 dòng giá đọc được:
+#   x4 -> đúng cả 6 dòng      x2 -> đúng cả 6 dòng
+#   x3 -> SAI 4 dòng (24.060 thành 24.080, 23.110 thành 23.410,
+#         31.250 thành 31.280, 28.540/29.110 thành 28.840/29.140)
+# x3 chính là mức bản cũ ghim cứng. Xếp x4 trước để hầu hết các kỳ chỉ tốn một
+# lượt OCR; x3 vẫn giữ ở cuối vì nó từng chạy tốt các kỳ trước.
+PHONG_TO = (4, 2, 3)
+
+
+def ocr(img_bytes, phong_to=3):
     """Tiền xử lý rồi OCR.
 
-    Ảnh gốc chỉ 966x554 — quá nhỏ, tesseract đọc sai tên mặt hàng (95-V thành
-    98V), mất dấu chấm nghìn, và BỎ HẲN hai dòng Điêzen. Phóng to 3 lần + xám +
-    tăng tương phản khắc phục phần lớn.
+    Ảnh gốc chỉ 961x553 — quá nhỏ, tesseract đọc sai tên mặt hàng (95-V thành
+    98V), mất dấu chấm nghìn, và BỎ HẲN hai dòng Điêzen. Phóng to + xám + tăng
+    tương phản khắc phục phần lớn.
     """
     from PIL import Image, ImageOps
     with tempfile.TemporaryDirectory() as td:
         src = os.path.join(td, "g.png")
         im = Image.open(io.BytesIO(img_bytes)).convert("L")
-        im = im.resize((im.width * 3, im.height * 3), Image.LANCZOS)
+        im = im.resize((im.width * phong_to, im.height * phong_to), Image.LANCZOS)
         im = ImageOps.autocontrast(im)
         im.save(src)
         r = subprocess.run(
@@ -196,6 +209,63 @@ def doc_webgia():
     return out
 
 
+def v2_theo_quy_dinh(v1):
+    """Vùng 2 suy từ Vùng 1: nhân 1,02 rồi làm tròn XUỐNG bội của 10.
+
+    Đúng cho cả 14 ô của hai kỳ 23/07 và 20/08/2026, kể cả mazút tính theo kg.
+    """
+    return int(v1 * 1.02) // 10 * 10
+
+
+def quy_tac_vung2_dung(wg):
+    """Quy tắc Vùng 2 có còn đúng ở kỳ này không.
+
+    Kiểm ngay trên các dòng webgia của chính kỳ đang xét — đó là số đã biết
+    chắc đúng. Nếu Petrolimex đổi cách tính thì bỏ hẳn phép kiểm, chứ không lấy
+    một quy tắc đã lỗi thời ra từ chối cả kỳ.
+    """
+    dong = [v for v in wg.values() if v.get("v1") and v.get("v2")]
+    return len(dong) >= 3 and all(v["v2"] == v2_theo_quy_dinh(v["v1"]) for v in dong)
+
+
+def doc_r95(raw, e5, wg):
+    """Rút hai dòng RON 95 từ MỘT lần OCR, kèm toàn bộ phép kiểm.
+
+    Trả dict {so_dong, neo, r95, ly_do}; r95 là None nếu lần OCR này không đạt.
+    """
+    rows = doc_bang(raw)
+    r = {"so_dong": len(rows), "neo": -1, "r95": None, "ly_do": ""}
+    for i, dong in enumerate(rows):
+        if dong[0] == e5["v1"] and (not e5["v2"] or dong[1] == e5["v2"]):
+            r["neo"] = i
+            break
+    if r["neo"] < 0:
+        r["ly_do"] = "không dòng nào trùng E5 của webgia"
+        return r
+    if r["neo"] < 2:
+        r["ly_do"] = f"neo E5 ở dòng {r['neo']}, không đủ 2 dòng phía trên cho RON 95"
+        return r
+
+    r3, r5 = rows[r["neo"] - 1], rows[r["neo"] - 2]
+    if not (r5[0] > r3[0] > e5["v1"]):
+        r["ly_do"] = f"sai thứ bậc giá (V={r5[0]}, III={r3[0]}, E5={e5['v1']})"
+        return r
+
+    # Mỏ neo E5 và kiểm thứ bậc KHÔNG đủ. Kỳ 20/08/2026 OCR đọc RON 95-V là
+    # 24.080 thay vì 24.060: neo vẫn khớp, thứ bậc vẫn đúng, và số sai đã ra
+    # tới email. Tỷ lệ Vùng 2 bắt được ngay — 24.080 x 1,02 ra 24.560 chứ
+    # không phải 24.540 như trong ảnh.
+    xau = [f"{ten} {v1}/{v2} (Vùng 2 lẽ ra {v2_theo_quy_dinh(v1)})"
+           for ten, (v1, v2) in (("RON95-V", r5), ("RON95-III", r3))
+           if v2 != v2_theo_quy_dinh(v1)]
+    if xau and quy_tac_vung2_dung(wg):
+        r["ly_do"] = "lệch tỷ lệ Vùng 2: " + " · ".join(xau)
+        return r
+
+    r["r95"] = {"III": r3, "V": r5}
+    return r
+
+
 def ky_cua_gia(d):
     """Kỳ mà phần `gia` của một file kết quả THẬT SỰ thuộc về.
 
@@ -255,46 +325,59 @@ def main():
         # --- OCR chỉ để lấy 2 dòng RON 95 ---
         img_url = anh_bang_gia(url)
         kq["anh"] = img_url
-        raw = ocr(get(img_url, binary=True))
-        rows = doc_bang(raw)
-        kq["so_dong_ocr"] = len(rows)
-
+        anh_byte = get(img_url, binary=True)
         e5 = wg["E5_R92"]
-        neo = -1
-        for idx, r in enumerate(rows):
-            if r[0] == e5["v1"] and (not e5["v2"] or r[1] == e5["v2"]):
-                neo = idx
+
+        # Thử lần lượt vài mức phóng to, dừng ở mức đầu tiên qua được HẾT các
+        # phép kiểm. Một mức phóng đọc lệch chữ số thì mức khác thường đọc đúng.
+        thu, tot = [], None
+        for muc in PHONG_TO:
+            lan = doc_r95(ocr(anh_byte, muc), e5, wg)
+            lan["phong_to"] = muc
+            thu.append(lan)
+            if lan["r95"]:
+                tot = lan
                 break
+
+        kq["so_dong_ocr"] = max(t["so_dong"] for t in thu)
+        kq["ocr_thu"] = [{"phong_to": t["phong_to"], "so_dong": t["so_dong"],
+                          "neo": t["neo"], "dat": bool(t["r95"]), "ly_do": t["ly_do"]}
+                         for t in thu]
+        co_dong = any(t["so_dong"] for t in thu)
+        co_neo = any(t["neo"] >= 0 for t in thu)
 
         # webgia có ĐỒNG BỘ với kỳ đang xét không?
         # Ảnh Petrolimex là của kỳ MỚI. Nếu OCR đọc được các dòng giá mà KHÔNG
-        # dòng nào trùng E5 của webgia, thì webgia còn đang ở kỳ CŨ (nó cập nhật
-        # chậm hơn Petrolimex vài chục phút). Đăng giá cũ dưới nhãn kỳ mới là
-        # sai nghiêm trọng -> không đăng gì, giữ số cũ.
-        if rows and neo < 0:
+        # dòng nào trùng E5 của webgia ở BẤT KỲ mức phóng nào, thì webgia còn
+        # đang ở kỳ CŨ (nó cập nhật chậm hơn Petrolimex vài chục phút). Đăng giá
+        # cũ dưới nhãn kỳ mới là sai nghiêm trọng -> không đăng gì, giữ số cũ.
+        if co_dong and not co_neo:
             kq["trang_thai"] = "LECH_NGUON"
             kq["loi"].append(
-                f"OCR đọc được {len(rows)} dòng nhưng không dòng nào trùng E5 webgia "
-                f"({e5['v1']}/{e5['v2']}) — webgia có thể còn ở kỳ cũ. Không đăng.")
-            kq["gia"] = {}
-        elif not rows:
+                f"OCR đọc được {kq['so_dong_ocr']} dòng nhưng không dòng nào trùng E5 "
+                f"webgia ({e5['v1']}/{e5['v2']}) — webgia có thể còn ở kỳ cũ. Không đăng.")
+            # Phải dọn chính `gia`: dòng `kq["gia"] = gia` ở cuối khối try sẽ
+            # ghi đè, nên gán kq["gia"] = {} ở đây thôi là không có tác dụng —
+            # giá webgia của kỳ CŨ vẫn lọt ra dưới nhãn kỳ mới.
+            gia = {}
+        elif not co_dong:
             kq["loi"].append("OCR không đọc được dòng nào — 4 mặt hàng webgia "
                              "chưa được đối chiếu với kỳ này")
 
-        if neo >= 2:
-            r3, r5 = rows[neo - 1], rows[neo - 2]
-            if not (r5[0] > r3[0] > e5["v1"]):
-                kq["loi"].append(
-                    f"RON95 sai thứ bậc giá (V={r5[0]}, III={r3[0]}, E5={e5['v1']}) — bỏ qua")
-            else:
-                gia["E10_R95_III"] = {"ten": "Xăng E10 RON 95-III", "v1": r3[0], "v2": r3[1],
-                                      "nguon": "OCR Petrolimex (neo E5)"}
-                gia["E10_R95_V"] = {"ten": "Xăng E10 RON 95-V", "v1": r5[0], "v2": r5[1],
-                                    "nguon": "OCR Petrolimex (neo E5)"}
-                kq["doi_chieu"]["neo_E5"] = {"dong_ocr": neo, "ocr": rows[neo],
-                                             "webgia": [e5["v1"], e5["v2"]], "khop": True}
-        elif rows:
-            kq["loi"].append(f"Neo E5 ở dòng {neo}, không đủ 2 dòng phía trên cho RON 95")
+        if tot:
+            r3, r5 = tot["r95"]["III"], tot["r95"]["V"]
+            gia["E10_R95_III"] = {"ten": "Xăng E10 RON 95-III", "v1": r3[0], "v2": r3[1],
+                                  "nguon": "OCR Petrolimex (neo E5)"}
+            gia["E10_R95_V"] = {"ten": "Xăng E10 RON 95-V", "v1": r5[0], "v2": r5[1],
+                                "nguon": "OCR Petrolimex (neo E5)"}
+            kq["doi_chieu"]["neo_E5"] = {"dong_ocr": tot["neo"], "phong_to": tot["phong_to"],
+                                         "ocr": [e5["v1"], e5["v2"]],
+                                         "webgia": [e5["v1"], e5["v2"]], "khop": True}
+            kq["doi_chieu"]["ty_le_vung2"] = quy_tac_vung2_dung(wg)
+        elif co_neo:
+            for t in thu:
+                if t["ly_do"]:
+                    kq["loi"].append(f"OCR phóng to x{t['phong_to']}: {t['ly_do']} — bỏ RON 95")
 
         co_r95 = "E10_R95_III" in gia
         if kq["trang_thai"] == "LECH_NGUON":
