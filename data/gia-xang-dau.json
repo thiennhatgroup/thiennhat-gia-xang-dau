@@ -1,54 +1,65 @@
 {
- "cap_nhat": "2026-08-22T02:17:06.995735+00:00",
- "trang_thai": "FAIL",
- "ky": "23/07/2026",
+ "cap_nhat": "2026-08-22T05:21:28.485927+00:00",
+ "trang_thai": "OK",
+ "ky": "20/08/2026",
+ "ky_cua_gia": "20/08/2026",
+ "ky_bai_moi_nhat": "20/08/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
   "E5_R92": {
    "ten": "Xăng E5 RON 92-II",
-   "v1": 20880,
-   "v2": 21290,
+   "v1": 21830,
+   "v2": 22260,
    "nguon": "webgia"
   },
   "DO_0001S": {
    "ten": "Điêzen 0,001S-V",
-   "v1": 27860,
-   "v2": 28410,
+   "v1": 30640,
+   "v2": 31250,
    "nguon": "webgia"
   },
   "DO_005S": {
    "ten": "Điêzen 0,05S-II",
-   "v1": 25760,
-   "v2": 26270,
+   "v1": 28540,
+   "v2": 29110,
    "nguon": "webgia"
   },
   "KERO": {
    "ten": "Dầu hỏa 2-K",
-   "v1": 26650,
-   "v2": 27180,
+   "v1": 27290,
+   "v2": 27830,
    "nguon": "webgia"
   },
   "E10_R95_III": {
    "ten": "Xăng E10 RON 95-III",
-   "v1": 21430,
-   "v2": 21850,
+   "v1": 22660,
+   "v2": 23110,
    "nguon": "OCR Petrolimex (neo E5)"
   },
   "E10_R95_V": {
    "ten": "Xăng E10 RON 95-V",
-   "v1": 22830,
-   "v2": 23280,
+   "v1": 24080,
+   "v2": 24540,
    "nguon": "OCR Petrolimex (neo E5)"
   }
  },
- "loi": [
-  "Không thấy ảnh gbl.jpg trong bài",
-  "Giữ nguyên giá kỳ 23/07/2026; kỳ 20/08/2026 chưa lấy được."
- ],
- "doi_chieu": {},
+ "loi": [],
+ "doi_chieu": {
+  "neo_E5": {
+   "dong_ocr": 2,
+   "ocr": [
+    21830,
+    22260
+   ],
+   "webgia": [
+    21830,
+    22260
+   ],
+   "khop": true
+  }
+ },
  "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-20-8-2026.html",
- "giu_so_cu_tu": "23/07/2026",
- "ky_bai_moi_nhat": "20/08/2026",
- "ky_cua_gia": "23/07/2026"
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/f7f9056bd837497289f09726b88a70ce/20-08-2026%2014-40-51.jpg",
+ "so_dong_ocr": 6
 }
