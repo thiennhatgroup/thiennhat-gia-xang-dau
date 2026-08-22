@@ -1,5 +1,5 @@
 {
- "cap_nhat": "2026-08-22T05:21:28.485927+00:00",
+ "cap_nhat": "2026-08-22T05:28:34.523663+00:00",
  "trang_thai": "OK",
  "ky": "20/08/2026",
  "ky_cua_gia": "20/08/2026",
@@ -39,7 +39,7 @@
   },
   "E10_R95_V": {
    "ten": "Xăng E10 RON 95-V",
-   "v1": 24080,
+   "v1": 24060,
    "v2": 24540,
    "nguon": "OCR Petrolimex (neo E5)"
   }
@@ -48,6 +48,7 @@
  "doi_chieu": {
   "neo_E5": {
    "dong_ocr": 2,
+   "phong_to": 4,
    "ocr": [
     21830,
     22260
@@ -57,9 +58,19 @@
     22260
    ],
    "khop": true
-  }
+  },
+  "ty_le_vung2": true
  },
  "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-20-8-2026.html",
  "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/f7f9056bd837497289f09726b88a70ce/20-08-2026%2014-40-51.jpg",
- "so_dong_ocr": 6
+ "so_dong_ocr": 6,
+ "ocr_thu": [
+  {
+   "phong_to": 4,
+   "so_dong": 6,
+   "neo": 2,
+   "dat": true,
+   "ly_do": ""
+  }
+ ]
 }
