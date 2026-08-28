@@ -1,6 +1,6 @@
 {
- "cap_nhat": "2026-08-27T20:13:41.168096+00:00",
- "trang_thai": "THIEU_R95",
+ "cap_nhat": "2026-08-28T12:36:54.935497+00:00",
+ "trang_thai": "FAIL",
  "ky": "27/08/2026",
  "ky_cua_gia": "27/08/2026",
  "ky_bai_moi_nhat": "27/08/2026",
@@ -33,35 +33,10 @@
   }
  },
  "loi": [
-  "OCR phóng to x4: neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95",
-  "OCR phóng to x2: neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95",
-  "OCR phóng to x3: neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95"
+  "webgia không có E5 — không có mỏ neo để kiểm OCR",
+  "Giữ nguyên giá kỳ 27/08/2026 của lần chạy trước."
  ],
  "doi_chieu": {},
  "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-27-8-2026.html",
- "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/99ba90be7c544c31bf61c68a7fe74f6a/27-08-2026%2014-39-11.jpg",
- "so_dong_ocr": 4,
- "ocr_thu": [
-  {
-   "phong_to": 4,
-   "so_dong": 4,
-   "neo": 1,
-   "dat": false,
-   "ly_do": "neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95"
-  },
-  {
-   "phong_to": 2,
-   "so_dong": 4,
-   "neo": 1,
-   "dat": false,
-   "ly_do": "neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95"
-  },
-  {
-   "phong_to": 3,
-   "so_dong": 4,
-   "neo": 1,
-   "dat": false,
-   "ly_do": "neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95"
-  }
- ]
+ "giu_so_cu_tu": "27/08/2026"
 }
