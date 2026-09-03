@@ -1,34 +1,34 @@
 {
- "cap_nhat": "2026-09-03T05:35:12.164746+00:00",
+ "cap_nhat": "2026-09-03T12:49:56.971771+00:00",
  "trang_thai": "THIEU_R95",
- "ky": "27/08/2026",
- "ky_cua_gia": "27/08/2026",
- "ky_bai_moi_nhat": "27/08/2026",
+ "ky": "03/09/2026",
+ "ky_cua_gia": "03/09/2026",
+ "ky_bai_moi_nhat": "03/09/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
   "E5_R92": {
    "ten": "Xăng E5 RON 92-II",
-   "v1": 21760,
-   "v2": 22190,
+   "v1": 22480,
+   "v2": 22920,
    "nguon": "webgia"
   },
   "DO_0001S": {
    "ten": "Điêzen 0,001S-V",
-   "v1": 29880,
-   "v2": 30470,
+   "v1": 29540,
+   "v2": 30130,
    "nguon": "webgia"
   },
   "DO_005S": {
    "ten": "Điêzen 0,05S-II",
-   "v1": 28080,
-   "v2": 28640,
+   "v1": 27740,
+   "v2": 28290,
    "nguon": "webgia"
   },
   "KERO": {
    "ten": "Dầu hỏa 2-K",
-   "v1": 26630,
-   "v2": 27160,
+   "v1": 26730,
+   "v2": 27260,
    "nguon": "webgia"
   }
  },
@@ -38,8 +38,8 @@
   "OCR phóng to x3: neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95"
  ],
  "doi_chieu": {},
- "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-27-8-2026.html",
- "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/99ba90be7c544c31bf61c68a7fe74f6a/27-08-2026%2014-39-11.jpg",
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-03-9-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/7ecc687fddbd42b4a5261016a0ca35d1/03-09-2026%2014-34-38.jpg",
  "so_dong_ocr": 4,
  "ocr_thu": [
   {
