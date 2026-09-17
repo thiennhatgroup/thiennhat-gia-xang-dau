@@ -1,9 +1,9 @@
 {
- "cap_nhat": "2026-09-17T05:55:24.507342+00:00",
- "trang_thai": "OK",
+ "cap_nhat": "2026-09-17T13:28:27.883011+00:00",
+ "trang_thai": "LECH_NGUON",
  "ky": "10/09/2026",
  "ky_cua_gia": "10/09/2026",
- "ky_bai_moi_nhat": "10/09/2026",
+ "ky_bai_moi_nhat": "17/09/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
@@ -44,33 +44,36 @@
    "nguon": "OCR Petrolimex (neo E5)"
   }
  },
- "loi": [],
- "doi_chieu": {
-  "neo_E5": {
-   "dong_ocr": 2,
-   "phong_to": 4,
-   "ocr": [
-    23740,
-    24210
-   ],
-   "webgia": [
-    23740,
-    24210
-   ],
-   "khop": true
-  },
-  "ty_le_vung2": true
- },
- "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-10-9-2026.html",
- "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/b6e64a7c1acd408c805696ee32b4d60c/10-09-2026%2014-56-32.jpg",
- "so_dong_ocr": 7,
+ "loi": [
+  "OCR đọc được 4 dòng nhưng không dòng nào trùng E5 webgia (25130/25630) — webgia có thể còn ở kỳ cũ. Không đăng.",
+  "Giữ nguyên giá kỳ 10/09/2026; kỳ 17/09/2026 chưa lấy được."
+ ],
+ "doi_chieu": {},
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-17-9-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/aac290f898a94647be3163dedf1aab72/2026-09-17_14-34-39.jpg",
+ "so_dong_ocr": 4,
  "ocr_thu": [
   {
    "phong_to": 4,
-   "so_dong": 7,
-   "neo": 2,
-   "dat": true,
-   "ly_do": ""
+   "so_dong": 2,
+   "neo": -1,
+   "dat": false,
+   "ly_do": "không dòng nào trùng E5 của webgia"
+  },
+  {
+   "phong_to": 2,
+   "so_dong": 4,
+   "neo": -1,
+   "dat": false,
+   "ly_do": "không dòng nào trùng E5 của webgia"
+  },
+  {
+   "phong_to": 3,
+   "so_dong": 3,
+   "neo": -1,
+   "dat": false,
+   "ly_do": "không dòng nào trùng E5 của webgia"
   }
- ]
+ ],
+ "giu_so_cu_tu": "10/09/2026"
 }
