@@ -1,9 +1,9 @@
 {
- "cap_nhat": "2026-10-01T07:02:41.364682+00:00",
- "trang_thai": "THIEU_R95",
+ "cap_nhat": "2026-10-01T15:27:37.942964+00:00",
+ "trang_thai": "LECH_NGUON",
  "ky": "24/09/2026",
  "ky_cua_gia": "24/09/2026",
- "ky_bai_moi_nhat": "24/09/2026",
+ "ky_bai_moi_nhat": "01/10/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
@@ -33,35 +33,35 @@
   }
  },
  "loi": [
-  "OCR phóng to x4: neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95",
-  "OCR phóng to x2: neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95",
-  "OCR phóng to x3: neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95"
+  "OCR đọc được 5 dòng nhưng không dòng nào trùng E5 webgia (26390/26910) — webgia có thể còn ở kỳ cũ. Không đăng.",
+  "Giữ nguyên giá kỳ 24/09/2026; kỳ 01/10/2026 chưa lấy được."
  ],
  "doi_chieu": {},
- "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-24-9-2026.html",
- "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/78c49f85f73444908149d63aeb309aad/24-09-2026%2014-30-25.jpg",
- "so_dong_ocr": 3,
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-01-10-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/e737dd4354894cf0ae18f12c8bfcaae9/01-10-2026%2015-04-48.jpg",
+ "so_dong_ocr": 5,
  "ocr_thu": [
   {
    "phong_to": 4,
-   "so_dong": 3,
-   "neo": 0,
+   "so_dong": 4,
+   "neo": -1,
    "dat": false,
-   "ly_do": "neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95"
+   "ly_do": "không dòng nào trùng E5 của webgia"
   },
   {
    "phong_to": 2,
-   "so_dong": 3,
-   "neo": 0,
+   "so_dong": 5,
+   "neo": -1,
    "dat": false,
-   "ly_do": "neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95"
+   "ly_do": "không dòng nào trùng E5 của webgia"
   },
   {
    "phong_to": 3,
-   "so_dong": 3,
-   "neo": 0,
+   "so_dong": 2,
+   "neo": -1,
    "dat": false,
-   "ly_do": "neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95"
+   "ly_do": "không dòng nào trùng E5 của webgia"
   }
- ]
+ ],
+ "giu_so_cu_tu": "24/09/2026"
 }
