@@ -1,67 +1,76 @@
 {
- "cap_nhat": "2026-10-13T17:26:36.859791+00:00",
- "trang_thai": "LECH_NGUON",
- "ky": "24/09/2026",
- "ky_cua_gia": "24/09/2026",
+ "cap_nhat": "2026-10-14T05:57:35.928967+00:00",
+ "trang_thai": "OK",
+ "ky": "08/10/2026",
+ "ky_cua_gia": "08/10/2026",
  "ky_bai_moi_nhat": "08/10/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
   "E5_R92": {
    "ten": "Xăng E5 RON 92-II",
-   "v1": 26390,
-   "v2": 26910,
+   "v1": 27700,
+   "v2": 28250,
    "nguon": "webgia"
   },
   "DO_0001S": {
    "ten": "Điêzen 0,001S-V",
-   "v1": 32090,
-   "v2": 32730,
+   "v1": 30520,
+   "v2": 31130,
    "nguon": "webgia"
   },
   "DO_005S": {
    "ten": "Điêzen 0,05S-II",
-   "v1": 30490,
-   "v2": 31090,
+   "v1": 29120,
+   "v2": 29700,
    "nguon": "webgia"
   },
   "KERO": {
    "ten": "Dầu hỏa 2-K",
-   "v1": 30020,
-   "v2": 30620,
+   "v1": 30630,
+   "v2": 31240,
    "nguon": "webgia"
+  },
+  "E10_R95_III": {
+   "ten": "Xăng E10 RON 95-III",
+   "v1": 28250,
+   "v2": 28810,
+   "nguon": "OCR Petrolimex (neo E5)"
+  },
+  "E10_R95_V": {
+   "ten": "Xăng E10 RON 95-V",
+   "v1": 29050,
+   "v2": 29630,
+   "nguon": "OCR Petrolimex (neo E5)"
   }
  },
- "loi": [
-  "OCR đọc được 6 dòng nhưng không dòng nào trùng E5 webgia (26390/26910) — webgia có thể còn ở kỳ cũ. Không đăng.",
-  "Giữ nguyên giá kỳ 24/09/2026; kỳ 08/10/2026 chưa lấy được."
- ],
- "doi_chieu": {},
+ "loi": [],
+ "doi_chieu": {
+  "neo_E5": {
+   "dong_ocr": 2,
+   "phong_to": 4,
+   "ocr": [
+    27700,
+    28250
+   ],
+   "webgia": [
+    27700,
+    28250
+   ],
+   "khop": true
+  },
+  "ty_le_vung2": true
+ },
  "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-08-10-2026.html",
  "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/a402e635724d4bc5b3434c0ba15a9847/123.jpg",
- "so_dong_ocr": 6,
+ "so_dong_ocr": 5,
  "ocr_thu": [
   {
    "phong_to": 4,
    "so_dong": 5,
-   "neo": -1,
-   "dat": false,
-   "ly_do": "không dòng nào trùng E5 của webgia"
-  },
-  {
-   "phong_to": 2,
-   "so_dong": 6,
-   "neo": -1,
-   "dat": false,
-   "ly_do": "không dòng nào trùng E5 của webgia"
-  },
-  {
-   "phong_to": 3,
-   "so_dong": 5,
-   "neo": -1,
-   "dat": false,
-   "ly_do": "không dòng nào trùng E5 của webgia"
+   "neo": 2,
+   "dat": true,
+   "ly_do": ""
   }
- ],
- "giu_so_cu_tu": "24/09/2026"
+ ]
 }
