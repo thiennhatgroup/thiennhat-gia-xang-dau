@@ -1,9 +1,9 @@
 {
- "cap_nhat": "2026-10-29T06:51:48.030964+00:00",
+ "cap_nhat": "2026-10-29T15:14:00.072434+00:00",
  "trang_thai": "LECH_NGUON",
  "ky": "08/10/2026",
  "ky_cua_gia": "08/10/2026",
- "ky_bai_moi_nhat": "22/10/2026",
+ "ky_bai_moi_nhat": "29/10/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
@@ -45,13 +45,13 @@
   }
  },
  "loi": [
-  "OCR đọc được 8 dòng nhưng không dòng nào trùng E5 webgia (27700/28250) — webgia có thể còn ở kỳ cũ. Không đăng.",
-  "Giữ nguyên giá kỳ 08/10/2026; kỳ 22/10/2026 chưa lấy được."
+  "OCR đọc được 7 dòng nhưng không dòng nào trùng E5 webgia (27700/28250) — webgia có thể còn ở kỳ cũ. Không đăng.",
+  "Giữ nguyên giá kỳ 08/10/2026; kỳ 29/10/2026 chưa lấy được."
  ],
  "doi_chieu": {},
- "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-22-10-2026.html",
- "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/09b07685c1574e33ab72f1b45284e088/22-10-2026%2014-52-38.jpg",
- "so_dong_ocr": 8,
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-29-10-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/feb34f2db46345ebb10cd61caddf3a90/29-10-2026%2014-42-08.jpg",
+ "so_dong_ocr": 7,
  "ocr_thu": [
   {
    "phong_to": 4,
@@ -62,14 +62,14 @@
   },
   {
    "phong_to": 2,
-   "so_dong": 8,
+   "so_dong": 7,
    "neo": -1,
    "dat": false,
    "ly_do": "không dòng nào trùng E5 của webgia"
   },
   {
    "phong_to": 3,
-   "so_dong": 7,
+   "so_dong": 6,
    "neo": -1,
    "dat": false,
    "ly_do": "không dòng nào trùng E5 của webgia"
