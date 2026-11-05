@@ -1,67 +1,83 @@
 {
- "cap_nhat": "2026-11-05T07:48:46.999640+00:00",
- "trang_thai": "THIEU_R95",
- "ky": "03/11/2026",
- "ky_cua_gia": "03/11/2026",
- "ky_bai_moi_nhat": "03/11/2026",
- "gio_hieu_luc": "22:00",
+ "cap_nhat": "2026-11-05T16:33:43.793857+00:00",
+ "trang_thai": "OK",
+ "ky": "05/11/2026",
+ "ky_cua_gia": "05/11/2026",
+ "ky_bai_moi_nhat": "05/11/2026",
+ "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
   "E5_R92": {
    "ten": "Xăng E5 RON 92-II",
-   "v1": 23200,
-   "v2": 23660,
+   "v1": 20890,
+   "v2": 21300,
    "nguon": "webgia"
   },
   "DO_0001S": {
    "ten": "Điêzen 0,001S-V",
-   "v1": 30270,
-   "v2": 30870,
+   "v1": 30090,
+   "v2": 30690,
    "nguon": "webgia"
   },
   "DO_005S": {
    "ten": "Điêzen 0,05S-II",
-   "v1": 28870,
-   "v2": 29440,
+   "v1": 28690,
+   "v2": 29260,
    "nguon": "webgia"
   },
   "KERO": {
    "ten": "Dầu hỏa 2-K",
-   "v1": 29010,
-   "v2": 29590,
+   "v1": 28600,
+   "v2": 29170,
    "nguon": "webgia"
+  },
+  "E10_R95_III": {
+   "ten": "Xăng E10 RON 95-III",
+   "v1": 21150,
+   "v2": 21570,
+   "nguon": "OCR Petrolimex (neo E5)"
+  },
+  "E10_R95_V": {
+   "ten": "Xăng E10 RON 95-V",
+   "v1": 22650,
+   "v2": 23100,
+   "nguon": "OCR Petrolimex (neo E5)"
   }
  },
- "loi": [
-  "OCR phóng to x4: không dòng nào trùng E5 của webgia — bỏ RON 95",
-  "OCR phóng to x2: không dòng nào trùng E5 của webgia — bỏ RON 95",
-  "OCR phóng to x3: neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95 — bỏ RON 95"
- ],
- "doi_chieu": {},
- "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-22-gio-00-phut-ngay-03-11-2026.html",
- "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/fd922f257e644b9fb9e0e3935ad61cdf/Screenshot%202026-11-03%20220244.jpg",
- "so_dong_ocr": 4,
+ "loi": [],
+ "doi_chieu": {
+  "neo_E5": {
+   "dong_ocr": 2,
+   "phong_to": 2,
+   "ocr": [
+    20890,
+    21300
+   ],
+   "webgia": [
+    20890,
+    21300
+   ],
+   "khop": true
+  },
+  "ty_le_vung2": true
+ },
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-05-11-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/37aa98c905e64b8b95ad71ff56d68fa6/05-11-2026%2014-42-31.jpg",
+ "so_dong_ocr": 5,
  "ocr_thu": [
   {
    "phong_to": 4,
-   "so_dong": 3,
-   "neo": -1,
+   "so_dong": 2,
+   "neo": 0,
    "dat": false,
-   "ly_do": "không dòng nào trùng E5 của webgia"
+   "ly_do": "neo E5 ở dòng 0, không đủ 2 dòng phía trên cho RON 95"
   },
   {
    "phong_to": 2,
-   "so_dong": 4,
-   "neo": -1,
-   "dat": false,
-   "ly_do": "không dòng nào trùng E5 của webgia"
-  },
-  {
-   "phong_to": 3,
-   "so_dong": 4,
-   "neo": 1,
-   "dat": false,
-   "ly_do": "neo E5 ở dòng 1, không đủ 2 dòng phía trên cho RON 95"
+   "so_dong": 5,
+   "neo": 2,
+   "dat": true,
+   "ly_do": ""
   }
  ]
 }
