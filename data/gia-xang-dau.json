@@ -1,9 +1,9 @@
 {
- "cap_nhat": "2026-11-25T19:50:11.045048+00:00",
- "trang_thai": "FAIL",
+ "cap_nhat": "2026-11-26T09:17:26.409153+00:00",
+ "trang_thai": "LECH_NGUON",
  "ky": "12/11/2026",
  "ky_cua_gia": "12/11/2026",
- "ky_bai_moi_nhat": "19/11/2026",
+ "ky_bai_moi_nhat": "26/11/2026",
  "gio_hieu_luc": "15:00",
  "nguon": "webgia + OCR Petrolimex (neo E5)",
  "gia": {
@@ -33,10 +33,35 @@
   }
  },
  "loi": [
-  "Không thấy ảnh nào trong /jpgs/ của bài",
-  "Giữ nguyên giá kỳ 12/11/2026; kỳ 19/11/2026 chưa lấy được."
+  "OCR đọc được 4 dòng nhưng không dòng nào trùng E5 webgia (18390/18750) — webgia có thể còn ở kỳ cũ. Không đăng.",
+  "Giữ nguyên giá kỳ 12/11/2026; kỳ 26/11/2026 chưa lấy được."
  ],
  "doi_chieu": {},
- "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-19-11-2026.html",
+ "bai": "https://www.petrolimex.com.vn/ndi/thong-cao-bao-chi/petrolimex-dieu-chinh-gia-xang-dau-tu-15-gio-00-phut-ngay-26-11-2026.html",
+ "anh": "https://files.petrolimex.com.vn/jpgs/6783dc1271ff449e95b74a9520964169/6a149adc59b84aedb43184b04fdb1b72/2026-11-26_14-42-19.jpg",
+ "so_dong_ocr": 4,
+ "ocr_thu": [
+  {
+   "phong_to": 4,
+   "so_dong": 2,
+   "neo": -1,
+   "dat": false,
+   "ly_do": "không dòng nào trùng E5 của webgia"
+  },
+  {
+   "phong_to": 2,
+   "so_dong": 3,
+   "neo": -1,
+   "dat": false,
+   "ly_do": "không dòng nào trùng E5 của webgia"
+  },
+  {
+   "phong_to": 3,
+   "so_dong": 4,
+   "neo": -1,
+   "dat": false,
+   "ly_do": "không dòng nào trùng E5 của webgia"
+  }
+ ],
  "giu_so_cu_tu": "12/11/2026"
 }
